@@ -31,14 +31,30 @@ module Aws
     })
   end
 
-  def self.get_concursos_por_usuario(filterId)
+  def self.get_concurso(concursoId, usuarioId)
+    response = @@dynamo_db.get_item({
+      key: {
+        "concursoId" => {
+          n: concursoId, 
+        }, 
+        "usuarioId" => {
+          n: usuarioId, 
+        }, 
+      }, 
+      table_name: 'concursos', 
+    })
+    # Returns an array of items:
+    return response.items
+  end
+
+  def self.get_concursos_por_usuario(usuarioId)
     response = @@dynamo_db.query({
        table_name: 'concursos',
        index_name: 'usuario_index',
        select: 'ALL_PROJECTED_ATTRIBUTES',
        key_condition_expression: 'usuario_id = :usuario_id',
        expression_attribute_values: {
-           ':usuario_id' => filterId
+           ':usuario_id' => usuarioId
        }
     })
     # Returns an array of items:
@@ -47,6 +63,53 @@ module Aws
 
   def self.get_concursos
     response = @@dynamo_db.scan(table_name: 'concursos')
+    return response.items
+  end
+
+  def self.actualizar_concurso(concursoId, usuarioId, customFields)
+    puts customFields
+    response = @@dynamo_db.get_item({
+      expression_attribute_names: {
+        "#AT" => "AlbumTitle", 
+        "#Y" => "Year", 
+      }, 
+      expression_attribute_values: {
+        ":t" => {
+          s: "Louder Than Ever", 
+        }, 
+        ":y" => {
+          n: "2015", 
+        }, 
+      },
+      key: {
+        "concursoId" => {
+          n: concursoId, 
+        }, 
+        "usuarioId" => {
+          n: usuarioId, 
+        }, 
+      },
+      return_values: "ALL_NEW", 
+      table_name: 'concursos',
+      update_expression: "SET #Y = :y, #AT = :t", 
+    })
+    # Returns an array of items:
+    return response.items
+  end
+
+  def self.eliminar_concurso(concursoId, usuarioId)
+    response = @@dynamo_db.delete_item({
+      key: {
+        "concursoId" => {
+          n: concursoId, 
+        }, 
+        "usuarioId" => {
+          n: usuarioId, 
+        }, 
+      }, 
+      table_name: 'concursos', 
+    })
+    # Returns an array of items:
     return response.items
   end
 
@@ -67,4 +130,82 @@ module Aws
         }
     })
   end
+
+  def self.get_video(videoId, concursoId)
+    response = @@dynamo_db.get_item({
+      key: {
+        "videoId" => {
+          n: videoId, 
+        }, 
+        "concursoId" => {
+          n: concursoId, 
+        }, 
+      }, 
+      table_name: 'videos', 
+    })
+    # Returns an array of items:
+    return response.items
+  end
+
+  def self.get_videos_por_concurso(concursoId)
+    response = @@dynamo_db.query({
+       table_name: 'videos',
+       index_name: 'concurso_index',
+       select: 'ALL_PROJECTED_ATTRIBUTES',
+       key_condition_expression: 'concurso_id = :concurso_id',
+       expression_attribute_values: {
+           ':concurso_id' => concursoId
+       }
+    })
+    # Returns an array of items:
+    return response.items
+  end
+
+  def self.actualizar_video(videoId, concursoId, customFields)
+    puts customFields
+    response = @@dynamo_db.get_item({
+      expression_attribute_names: {
+        "#AT" => "AlbumTitle", 
+        "#Y" => "Year", 
+      }, 
+      expression_attribute_values: {
+        ":t" => {
+          s: "Louder Than Ever", 
+        }, 
+        ":y" => {
+          n: "2015", 
+        }, 
+      },
+      key: {
+        "videoId" => {
+          n: videoId, 
+        }, 
+        "concursoId" => {
+          n: concursoId, 
+        }, 
+      },
+      return_values: "ALL_NEW", 
+      table_name: 'videos',
+      update_expression: "SET #Y = :y, #AT = :t", 
+    })
+    # Returns an array of items:
+    return response.items
+  end
+
+  def self.eliminar_video(videoId, concursoId)
+    response = @@dynamo_db.delete_item({
+      key: {
+        "videoId" => {
+          n: videoId, 
+        }, 
+        "concursoId" => {
+          n: concursoId, 
+        }, 
+      }, 
+      table_name: 'videos', 
+    })
+    # Returns an array of items:
+    return response.items
+  end
+
 end

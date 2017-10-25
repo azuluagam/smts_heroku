@@ -10,7 +10,23 @@ class Usuario < ApplicationRecord
 
  
   def feed
-    Concurso.where("usuario_id = ?", id)
+    items = Aws.get_concursos_por_usuario(id)
+    items.each { |item|
+        info = item['concurso_info']
+        concurso = Hash.new
+        concurso[:nombre] = info['nombre']
+        concurso[:fechaInicio] = info['fecha_inicio']
+        concurso[:fechaFin] = info['fecha_fin']
+        concurso[:descripcion] = info['descripcion']
+        concurso[:imagen] = info['imagen']
+        concurso[:id] = Integer(item['concurso_id'])
+        concurso[:usuario_id] = id
+        puts concurso
+        concurso = Concurso.build(concurso[:id], concurso[:nombre], concurso[:imagen], concurso[:fechaInicio], concurso[:fechaFin], concurso[:descripcion], concurso[:usuario_id])
+        concursos.push(concurso)
+    }
+    @concursos = concursos
+    #Concurso.where("usuario_id = ?", id)
   end
 
   def Usuario.digest(string)

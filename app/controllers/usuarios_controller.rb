@@ -22,6 +22,7 @@ class UsuariosController < ApplicationController
         concurso[:usuario_id] = @usuario.id
         puts concurso
         @concurso = Concurso.new(concurso)
+        puts @concurso
         concursos.push(@concurso)
     }
     @concursos = concursos

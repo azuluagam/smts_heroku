@@ -3,12 +3,15 @@ class ConcursosController < ApplicationController
   before_action :correct_user,   only: :destroy
 
   def show
+    concurso = Aws.get_concurso(params[:id], current_user.id)
+    puts concurso
+    '''
     @concurso = Concurso.find(params[:id])
     @video = @concurso.videos.build  
     @videos = @concurso.videos.paginate(page: params[:page])
     .paginate(:page => params[:page], :per_page => 2)
     .order(created_at: :asc)
-
+    '''
   end
 
   def create
@@ -41,16 +44,22 @@ class ConcursosController < ApplicationController
   end
 
   def destroy
+    puts @concurso.id
+    '''
+    Aws.eliminar_concurso(@concurso.id, current_user.id)
     @concurso.destroy
     flash[:success] = "Concurso Eliminado!"
     redirect_to request.referrer || root_url
+    '''
   end
 
   def edit
-    @concurso = Concurso.find(params[:id])
+    concurso = Aws.get_concurso(params[:id], current_user.id)
+    puts concurso
+    #@concurso = Concurso.find(params[:id])
   end
 
-  def update
+  def update #wtf?
     @concurso = Concurso.find(params[:id])
     if @concurso.update_attributes(concurso_params)
       flash[:success] = "Concurso Actualizado"

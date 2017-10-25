@@ -12,16 +12,19 @@ Vagrant.configure("2") do |config|
 		ruby.vm.network "forwarded_port", guest: 3000, host: 3000,
   			auto_correct: true
   	ruby.vm.network "private_network", type: "dhcp"
+    #https://github.com/CentOS/sig-cloud-instance-build/issues/27 / for enabling /vagrant directory
+    #ruby.vm.synced_folder ".", "/home/vagrant/sync", disabled: true
     #ruby.vm.provision "chef_solo" do |chef|
     #  chef.cookbooks_path = ["site-cookbooks"]
     #  chef.add_recipe "rails-stack"
     #end
-    #ruby.vm.provision "shell", path: "config.sh", privileged: false
+    ruby.vm.provision "shell", path: "config.sh", privileged: false
 	end
 
 	config.vm.define "db" do |db|
 		db.vm.box = "bento/centos-7.3"
     db.vm.network "private_network", type: "dhcp"
+    #db.vm.synced_folder ".", "/home/vagrant/sync", disabled: true
     #db.vm.provision "chef_solo" do |chef|
     #  chef.cookbooks_path = ["site-cookbooks"]
     #  chef.add_recipe "mariadb"
@@ -44,8 +47,8 @@ Vagrant.configure("2") do |config|
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
   # NOTE: This will enable public access to the opened port
-  #config.vm.network "forwarded_port", guest: 3000, host: 3000,
-  #	auto_correct: true
+  config.vm.network "forwarded_port", guest: 3000, host: 3000,
+  	auto_correct: true
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine and only allow access
