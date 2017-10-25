@@ -46,7 +46,9 @@ gem 'jwplayer-rails', :git => 'https://github.com/dutgriff/jwplayer-rails.git'
 gem 'jquery-rails'
 #gem 'rdoc'
 
-gem 'aws-sdk', '~> 3'
+#gem 'aws-sdk', '~> 3'
+gem 'aws-sdk', '~> 2'
+gem 'dynamoid', '~> 1'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
