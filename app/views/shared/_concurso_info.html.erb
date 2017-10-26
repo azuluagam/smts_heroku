@@ -1,4 +1,4 @@
-<%= link_to @concurso.nombre, "/sites/"+@concurso.id.to_s %>
+<%= link_to @concurso.nombre, "/sites/"+@concurso.concurso_id.to_s %>
 <h1><%= @concurso.nombre %></h1>
-<span><%= link_to "Ver Concurso", "/sites/"+@concurso.id.to_s %></span>
+<span><%= link_to "Ver Concurso", "/sites/"+@concurso.concurso_id.to_s %></span>
 <span><%= pluralize(@concurso.videos.count, "video") %></span>

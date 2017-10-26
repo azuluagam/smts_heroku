@@ -5,27 +5,20 @@ class UsuariosController < ApplicationController
   before_action :correct_user,   only:  [:edit, :update]
   before_action :admin_user, only: :destroy
   def show
-    @usuario = Usuario.find(params[:usuario_id])
+    puts params[:id]
+    @usuario = Usuario.find(params[:id].to_s)
     puts 'showAct'
-    puts @usuario.id
-    concursos = []
-    items = Aws.get_concursos_por_usuario(@usuario.id)
-    items.each { |item|
-      info = item['concurso_info']
-      concurso = Hash.new
-      concurso[:nombre] = info['nombre']
-      concurso[:fechaInicio] = info['fecha_inicio']
-      concurso[:fechaFin] = info['fecha_fin']
-      concurso[:descripcion] = info['descripcion']
-      concurso[:imagen] = info['imagen']
-      concurso[:id] = Integer(item['concurso_id'])
-      concurso[:usuario_id] = @usuario.id
-      puts concurso
-
-      concursos.push(concurso)
-    }
-    @concursos = concursos
-
+    puts @usuario.usuario_id
+    @concursos = Concurso.all
+    @cfinals = Array.new
+    @concursos.each { |c| s = c.usuario_ids
+      s.each do |n|
+        if n == @usuario.usuario_id
+          @cfinals.push(c)
+        end
+      end
+    }    
+    @concursos = @cfinals
   end
 
   def index
@@ -38,15 +31,14 @@ class UsuariosController < ApplicationController
   end
 
   def create
-    puts usuario_params
-    @usuario = Usuario.new(:nombre => usuario_params["nombre"], :apellido => usuario_params["apellido"], :email => usuario_params["email"], :password_digest => usuario_params["password_digest"], :admin => false)
+    @usuario = Usuario.new(:nombre => usuario_params["nombre"], :apellido => usuario_params["apellido"], :email => usuario_params["email"], :password_digest => usuario_params["password"], :admin => false)
     if @usuario.save
       puts @usuario.usuario_id
       log_in @usuario
       flash[:success] = "Bienvenido a SmartTools!"
       #redirect_to action: "show", id: @usuario.usuario_id
-      redirect_to @usuario
-      #redirect_to controller: 'usuarios', action: 'show', id: @usuario.usuario_id
+      #redirect_to @usuario
+      redirect_to controller: 'usuarios', action: 'show', id: @usuario.usuario_id
     else
       render 'new'
     end
