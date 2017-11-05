@@ -1,6 +1,6 @@
 class Concurso
   include Dynamoid::Document
-  table :name => :concursos, :key => :concurso_id, :read_capacity => 5, :write_capacity => 5
+  table :name => :concursos, :key => :id, :read_capacity => 5, :write_capacity => 5
   #mount_uploader :imagen, PictureUploader
 
   field :nombre

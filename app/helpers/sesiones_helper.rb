@@ -2,8 +2,8 @@ module SesionesHelper
 
     # Logs in the given user.
   def log_in(usuario)
-    puts usuario.usuario_id
-    session[:usuario_id] = usuario.usuario_id
+    puts usuario.id
+    session[:usuario_id] = usuario.id
   end
   
   # Remembers a user in a persistent session.
@@ -21,7 +21,7 @@ module SesionesHelper
 
   # Returns the current logged-in user (if any).
   def current_user
-    @current_user = nil #||= Usuario.find_by(id: session[:usuario_id])
+    @current_user = nil #||= Usuario.find(session[:usuario_id])
   end
 
   # Returns true if the user is logged in, false otherwise.

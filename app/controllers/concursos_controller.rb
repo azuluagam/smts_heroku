@@ -5,36 +5,17 @@ class ConcursosController < ApplicationController
   def show
     concurso = Aws.get_concurso(params[:id], current_user.id)
     puts concurso
-    '''
     @concurso = Concurso.find(params[:id])
     @video = @concurso.videos.build  
     @videos = @concurso.videos.paginate(page: params[:page])
     .paginate(:page => params[:page], :per_page => 2)
     .order(created_at: :asc)
-    '''
+
   end
 
   def create
     @concurso = Concurso.new(concurso_params)
-    concurso_id = DateTime.now.to_time.to_i
-    nombre  = concurso_params['nombre']
-    fecha_inicio = concurso_params['fechaInicio']
-    fecha_fin = concurso_params['fechaFin']
-    descripcion = concurso_params['descripcion']
-    usuario_id = current_user.id
-
-    aws_params = Hash.new
-    aws_params[:concurso_id] = concurso_id
-    aws_params[:usuario_id] = usuario_id
-    aws_params[:custom_fields]    = {
-        'nombre'    => nombre,
-        'fecha_inicio'   => fecha_inicio,
-        'fecha_fin' => fecha_fin,
-        'descripcion' => descripcion,
-        'imagen' => @concurso.imagen.file.filename
-    }
-    @concurso.save
-    if Aws.save_concurso_to_db(aws_params)
+    if @concurso.save
       flash[:success] = "Concurso Creado!"
       redirect_to root_url
     else
@@ -44,19 +25,13 @@ class ConcursosController < ApplicationController
   end
 
   def destroy
-    puts @concurso.id
-    '''
-    Aws.eliminar_concurso(@concurso.id, current_user.id)
-    @concurso.destroy
+    @concurso.delete
     flash[:success] = "Concurso Eliminado!"
     redirect_to request.referrer || root_url
-    '''
   end
 
   def edit
-    concurso = Aws.get_concurso(params[:id], current_user.id)
-    puts concurso
-    #@concurso = Concurso.find(params[:id])
+    @concurso = Concurso.find(params[:id])
   end
 
   def update #wtf?

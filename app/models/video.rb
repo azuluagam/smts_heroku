@@ -1,6 +1,6 @@
 class Video
   include Dynamoid::Document
-  table :name => :videos, :key => :video, :read_capacity => 5, :write_capacity => 5
+  table :name => :videos, :key => :id, :read_capacity => 5, :write_capacity => 5
   #mount_uploader :video_source, VideoUploader # Tells rails to use this uploader for this model.
 
   field :nombre

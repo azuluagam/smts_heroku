@@ -1,6 +1,6 @@
 class Usuario
   include Dynamoid::Document
-  table :name => :usuarios, :key => :usuario_id, :read_capacity => 5, :write_capacity => 5
+  table :name => :usuarios, :key => :id, :read_capacity => 5, :write_capacity => 5
 
   field :nombre
   field :apellido
