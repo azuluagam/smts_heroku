@@ -16,7 +16,8 @@ class ConcursosController < ApplicationController
   def create
     @concurso = Concurso.new(concurso_params)
     if @concurso.save
-      flash[:success] = "Concurso Creado!"
+    @concurso.usuario = current_user
+    flash[:success] = "Concurso Creado!"
       redirect_to root_url
     else
       @feed_items = []

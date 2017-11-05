@@ -5,30 +5,20 @@ class UsuariosController < ApplicationController
   before_action :correct_user,   only:  [:edit, :update]
   before_action :admin_user, only: :destroy
   def show
-    puts params[:usuario_id]
     puts params[:id]
-    @usuario = Usuario.find(params[:id])
+    @usuario = Usuario.find(params[:id].to_s)
     puts 'showAct'
-    puts @usuario.id
-    concursos = []
-    items = Aws.get_concursos_por_usuario(@usuario.id)
-    items.each { |item|
-      info = item['concurso_info']
-      concurso = Hash.new
-      concurso[:nombre] = info['n
-ombre']
-      concurso[:fechaInicio] = info['fecha_inicio']
-      concurso[:fechaFin] = info['fecha_fin']
-      concurso[:descripcion] = info['descripcion']
-      concurso[:imagen] = info['imagen']
-      concurso[:id] = Integer(item['concurso_id'])
-      concurso[:usuario_id] = @usuario.id
-      puts concurso
-
-      concursos.push(concurso)
-    }
-    @concursos = concursos
-
+    puts @usuario.usuario_id
+    @concursos = Concurso.all
+    @cfinals = Array.new
+    @concursos.each { |c| s = c.usuario_ids
+      s.each do |n|
+        if n == @usuario.usuario_id
+          @cfinals.push(c)
+        end
+      end
+    }    
+    @concursos = @cfinals
   end
 
   def index

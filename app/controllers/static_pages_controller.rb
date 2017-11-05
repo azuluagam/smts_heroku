@@ -1,9 +1,21 @@
 class StaticPagesController < ApplicationController
+  require 'will_paginate/array'
   include SesionesHelper
   
   def inicio
     if logged_in?
-      @concurso  = Concurso.new(1, "tet", nil, "15/05/2017", "17/05/2017", "hola", 101) #current_user.concursos.build
+      @concursos = Concurso.all
+      @cfinals = Array.new
+      @concursos.each { |c| s = c.usuario_ids
+        s.each do |n|
+          if n == current_user.usuario_id
+            @cfinals.push(c)
+          end
+        end
+      }    
+      @concursos = @cfinals
+      current_user.concursos = @concursos
+      @concurso  = @concursos #current_user.concursos.build
       @feed_items = current_user.feed.paginate(page: params[:page])
     end 
   end
