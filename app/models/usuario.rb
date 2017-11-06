@@ -24,7 +24,7 @@ class Usuario
     @cfinals = Array.new
     @concursos.each { |c| s = c.usuario_ids
       s.each do |n|
-        if n == usuario_id
+        if n == id
           @cfinals.push(c)
         end
       end

@@ -1,11 +1,11 @@
-<li id="concurso-<%= concurso.concurso_id %>">
-  
-  <span class="concurso"><%= link_to concurso.nombre,"/sites/"+concurso.concurso_id.to_s %></span>
+<li id="concurso-<%= concurso.id.to_s %>">
+  <%= link_to gravatar_for(concurso.usuario, size: 50), concurso.usuario %>
+  <span class="concurso"><%= link_to concurso.nombre,"/sites/"+concurso.id.to_s %></span>
   <span><%= "- Creado por:" %></span>
-  
+  <span class="usuario"><%= link_to concurso.usuario.nombre, concurso.usuario %></span>
   <span class="descripcion">
     <%= concurso.descripcion %>
-    
+    <!-- Here goes the image of the contest -->
   </span>
   <span class="timestamp">
 

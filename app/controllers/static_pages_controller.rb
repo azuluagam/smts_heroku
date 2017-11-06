@@ -8,14 +8,14 @@ class StaticPagesController < ApplicationController
       @cfinals = Array.new
       @concursos.each { |c| s = c.usuario_ids
         s.each do |n|
-          if n == current_user.usuario_id
+          if n == current_user.id
             @cfinals.push(c)
           end
         end
       }    
       @concursos = @cfinals
       current_user.concursos = @concursos
-      @concurso  = @concursos #current_user.concursos.build
+      @concurso  = Concurso.build
       @feed_items = current_user.feed.paginate(page: params[:page])
     end 
   end

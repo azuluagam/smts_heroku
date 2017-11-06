@@ -3,21 +3,27 @@ class ConcursosController < ApplicationController
   before_action :correct_user,   only: :destroy
 
   def show
-    concurso = Aws.get_concurso(params[:id], current_user.id)
-    puts concurso
     @concurso = Concurso.find(params[:id])
-    @video = @concurso.videos.build  
-    @videos = @concurso.videos.paginate(page: params[:page])
-    .paginate(:page => params[:page], :per_page => 2)
-    .order(created_at: :asc)
+    @video = Video.new
+    @videos = @concurso.videos #.paginate(page: params[:page])
+    #.paginate(:page => params[:page], :per_page => 2)
+    #.order(created_at: :asc)
 
   end
 
   def create
-    @concurso = Concurso.new(concurso_params)
-    if @concurso.save
+    @concurso = Concurso.new(:nombre => concurso_params[:nombre], :imagen => concurso_params[:imagen].original_filename, :url => nil, :fechaInicio => concurso_params[:fechaInicio], :fechaFin => concurso_params[:fechaFin], :descripcion => concurso_params[:descripcion])
     @concurso.usuario = current_user
-    flash[:success] = "Concurso Creado!"
+    puts "fuck3"
+    #File.open(Rails.root.join('public', 'uploads', uploaded_io.original_filename), 'wb') do |file|
+    #  file.write(uploaded_io.read)
+    #end
+    img = concurso_params[:imagen]
+    puts img
+    if @concurso.save
+      uploader = ImagenUploader.new
+      uploader.store!(img)
+      flash[:success] = "Concurso Creado!"
       redirect_to root_url
     else
       @feed_items = []
@@ -36,8 +42,11 @@ class ConcursosController < ApplicationController
   end
 
   def update #wtf?
+    puts "actualizar"
     @concurso = Concurso.find(params[:id])
-    if @concurso.update_attributes(concurso_params)
+    if @concurso.update_attributes(:nombre => concurso_params[:nombre], :imagen => concurso_params[:imagen].original_filename, :fechaInicio => concurso_params[:fechaInicio], :fechaFin => concurso_params[:fechaFin], :descripcion => concurso_params[:descripcion])
+      uploader = ImagenUploader.new
+      uploader.store!(concurso_params[:imagen])
       flash[:success] = "Concurso Actualizado"
       redirect_to @concurso
       # Handle a successful update.
@@ -55,7 +64,7 @@ class ConcursosController < ApplicationController
     end
 
     def correct_user
-      @concurso = current_user.concursos.find_by(id: params[:id])
+      @concurso = Concurso.find(params[:id])
       redirect_to root_url if @concurso.nil?
     end
 end
