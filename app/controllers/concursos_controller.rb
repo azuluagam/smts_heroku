@@ -5,7 +5,17 @@ class ConcursosController < ApplicationController
   def show
     @concurso = Concurso.find(params[:id])
     @video = Video.new
-    @videos = @concurso.videos #.paginate(page: params[:page])
+    @videos = Video.all
+    @vfinals = Array.new
+    @videos.each { |v| s = v.concurso_ids
+    s.each do |n|
+      if n == @concurso.id
+        @vfinals.push(v)
+      end
+    end
+    }
+    @videos = @vfinals
+    #@videos = @concurso.videos #.paginate(page: params[:page])
     #.paginate(:page => params[:page], :per_page => 2)
     #.order(created_at: :asc)
 

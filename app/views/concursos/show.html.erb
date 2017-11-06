@@ -16,13 +16,10 @@
 
       <h3>Videos (<%= @concurso.videos.count %>)</h3>
       
-      <%= will_paginate @videos %>      
-
       <ul class="videos">
           <%= render @videos %>
       </ul>
-      
-      <%= will_paginate @videos %>
+
 
     <% end %>    
   </div>
