@@ -5,7 +5,7 @@
   <span class="usuario"><%= link_to concurso.usuario.nombre, concurso.usuario %></span>
   <span class="descripcion">
     <%= concurso.descripcion %>
-    <!-- Here goes the image of the contest -->
+    <%= image_tag "https://s3.amazonaws.com/smarttoolsG5/public/upload/" + concurso.imagen if concurso.imagen? %>
   </span>
   <span class="timestamp">
 

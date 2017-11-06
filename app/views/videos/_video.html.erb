@@ -5,7 +5,7 @@
   <%= jwplayer({
         id: "jwplayer"+video.id.to_s,
         name: video.id,
-        file: "https://s3.amazonaws.com/smarttoolsG5/public/upload/"+video.video_source.to_s,
+        file: "https://s3.amazonaws.com/smarttoolsG5/public/upload/" + video.video_source.split('.')[0] + ".mp4",
         width: 500,
         height: 200
    }) %>

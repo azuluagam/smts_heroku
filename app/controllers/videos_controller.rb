@@ -25,7 +25,7 @@ class VideosController < ApplicationController
   # GET /videos/new
   def new
     @concursos = Concurso.all
-    @video = Video.new
+    @video = Video.build
   end
 
   # GET /videos/1/edit
@@ -35,7 +35,6 @@ class VideosController < ApplicationController
   end
 
   def update
-    puts "actualizar video"
     @video = Video.find(params[:id])
     @concurso = Concurso.find(video_params[:id])
     @video.concurso = @concurso
@@ -46,7 +45,6 @@ class VideosController < ApplicationController
     else
       render 'edit'
     end
-
   end
 
   # POST /videos
@@ -61,7 +59,7 @@ class VideosController < ApplicationController
         uploader = VideoUploader.new
         uploader.store!(video_params[:video_source])
         sqs = Aws::SQS::Client.new(region: 'us-east-2')
-        body = @video.id.to_s + '-' + @concurso.id.to_s + '-' +video_params[:video_source].original_filename
+        body = @video.id.to_s + ';' + @concurso.id.to_s + ';' +video_params[:video_source].original_filename
         sqs.send_message(queue_url: 'https://sqs.us-east-2.amazonaws.com/893543758111/smts-videos-queue', message_body: body)
         format.html { redirect_to @video, notice: 'Video was successfully created.' }
         format.json { render :show, status: :created, location: @video }

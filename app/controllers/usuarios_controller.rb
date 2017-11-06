@@ -4,6 +4,7 @@ class UsuariosController < ApplicationController
   before_action :logged_in_usuario, only: [:show, :index, :edit, :update, :destroy]
   before_action :correct_user,   only:  [:edit, :update]
   before_action :admin_user, only: :destroy
+
   def show
     @usuario = Usuario.find(params[:usuario_id].to_s)
     @concursos = Concurso.all
@@ -21,7 +22,6 @@ class UsuariosController < ApplicationController
 
   def index
     @usuarios = Usuario.all
-    #@usuarios = Usuario.paginate(page: params[:page])
   end
 
   def new
@@ -29,21 +29,15 @@ class UsuariosController < ApplicationController
   end
 
   def create
-    puts usuario_params
     @usuario = Usuario.new(:nombre => usuario_params[:nombre], :apellido => usuario_params[:apellido], :email => usuario_params[:email], :password_digest => usuario_params[:password], :admin => false)
     if @usuario.save
       puts @usuario.id
       log_in @usuario
       flash[:success] = "Bienvenido a SmartTools!"
       redirect_to @usuario
-      #redirect_to action: "show", id: @usuario.id
-      #redirect_to @usuario, id: @usuario.usuario_id
-      #redirect_to controller: 'usuarios', action: 'show', id: @usuario.usuario_id
     else
       render 'new'
     end
-
-
   end
 
   def edit
@@ -62,13 +56,10 @@ class UsuariosController < ApplicationController
   end
  
   def destroy
-    Usuario.find(params[:id]).destroy
+    Usuario.find(params[:id]).delete
     flash[:success] = "Usuario Eliminado"
     redirect_to usuarios_url
   end
-
-
-
 
 
   private
