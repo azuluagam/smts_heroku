@@ -21,11 +21,11 @@ class Concurso
   def initialize(id, nombre, imagen, fechaInicio, fechaFin, descripcion, usuario)
       @id = id
       @nombre = nombre
-	  @imagen = imagen
-	  @fechaInicio = fechaInicio
-	  @fechaFin = fechaFin
-	  @descripcion = descripcion
-	  @usuario = usuario
+    @imagen = imagen
+    @fechaInicio = fechaInicio
+    @fechaFin = fechaFin
+    @descripcion = descripcion
+    @usuario = usuario
    end
    '''
 end
