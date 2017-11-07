@@ -12,7 +12,7 @@
 
 ActiveRecord::Schema.define(version: 20171008043928) do
 
-  create_table "concursos", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "concursos", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string "nombre"
     t.string "imagen"
     t.string "url"
@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(version: 20171008043928) do
     t.index ["usuario_id"], name: "index_concursos_on_usuario_id"
   end
 
-  create_table "usuarios", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "usuarios", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string "nombre"
     t.string "apellido"
     t.string "email"
@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 20171008043928) do
     t.index ["email"], name: "index_usuarios_on_email", unique: true
   end
 
-  create_table "videos", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "videos", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string "nombre"
     t.string "apellido"
     t.string "email"

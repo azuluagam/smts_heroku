@@ -21,6 +21,7 @@ Rails.application.routes.draw do
   post   '/sites/:id', to: 'concursos#create'
   post   '/concursos/:id', to: 'concursos#edit'
   get   '/concursos/:id', to: 'concursos#show'
+  get   '/usuarios/:usuario_id', to: 'usuarios#show'
   resources :videos
   resources :usuarios
   resources :concursos, only: [:update, :create, :destroy]

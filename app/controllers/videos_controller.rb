@@ -6,8 +6,8 @@ class VideosController < ApplicationController
   # GET /videos.json
   def index
     @videos = Video.where(estado: false)
-    .paginate(:page => params[:page], :per_page => 50)
-    .order(created_at: :asc)
+    #.paginate(:page => params[:page], :per_page => 50)
+    #.order(created_at: :asc)
   end
 
   # GET /videos/1
@@ -16,65 +16,50 @@ class VideosController < ApplicationController
     @video = Video.find(params[:id])
   end
 
+  def destroy
+    @video.delete
+    flash[:success] = "Video Eliminado!"
+    redirect_to request.referrer || root_url
+  end
+
   # GET /videos/new
   def new
-    concursos = []
-    items = Aws.get_concursos
-    items.each { |item|
-      info = item['concurso_info']
-      puts info['descripcion']
-      puts item['concurso_info']
-      puts item['concurso_id']
-      puts item
-      #@concurso
-      concurso = Hash.new
-      concurso[:nombre] = info['nombre']
-      concurso[:fechaInicio] = info['fecha_inicio']
-      concurso[:fechaFin] = info['fecha_fin']
-      concurso[:descripcion] = info['descripcion']
-      concurso[:id] = Integer(item['concurso_id'])
-      puts concurso
-      @concurso = Concurso.new(concurso)
-      concursos.push(@concurso)
-    }
-    @concursos = concursos
-    @video = Video.new
+    @concursos = Concurso.all
+    @video = Video.build
   end
 
   # GET /videos/1/edit
   def edit
+    @concursos = Concurso.all
+    @video = Video.find(params[:id])
+  end
+
+  def update
+    @video = Video.find(params[:id])
+    @concurso = Concurso.find(video_params[:id])
+    @video.concurso = @concurso
+    if @video.update_attributes(:nombre => video_params[:nombre], :apellido => video_params[:apellido], :email => video_params[:email], :titulo => video_params[:titulo], :descripcion => video_params[:descripcion])
+      flash[:success] = "Video Actualizado"
+      redirect_to @video
+      # Handle a successful update.
+    else
+      render 'edit'
+    end
   end
 
   # POST /videos
   # POST /videos.json
   def create
-    @video = Video.new(video_params)
-    video_id = DateTime.now.to_time.to_i
-    nombre  = video_params['nombre']
-    apellido = video_params['apellido']
-    email = video_params['email']
-    titulo = video_params['titulo']
-    descripcion = video_params['descripcion']
-    concurso_id = video_params['concurso_id']
-
-    aws_params = Hash.new
-    aws_params[:video_id] = video_id
-    aws_params[:concurso_id] = concurso_id
-    aws_params[:custom_fields]    = {
-        'nombre'    => nombre,
-        'apellido'   => apellido,
-        'email' => email,
-        'titulo' => titulo,
-        'video' => @video.video_source.file.filename,
-        'descripcion' => descripcion,
-        'estado' => 0
-    }
+    puts video_params
+    @video = Video.new(:nombre => video_params[:nombre], :apellido => video_params[:apellido], :email => video_params[:email], :titulo => video_params[:titulo], :descripcion => video_params[:descripcion], :video_source => video_params[:video_source].original_filename)
+    @concurso = Concurso.find(video_params[:id])
+    @video.concurso = @concurso
     respond_to do |format|
-      if Aws.save_video_to_db(aws_params)
+      if  @video.save
         uploader = VideoUploader.new
-        uploader.store!(@video.video_source.file)
+        uploader.store!(video_params[:video_source])
         sqs = Aws::SQS::Client.new(region: 'us-east-2')
-        body = video_id.to_s + '-' + concurso_id.to_s + '-' +@video.video_source.file.filename
+        body = @video.id.to_s + ';' + @concurso.id.to_s + ';' +video_params[:video_source].original_filename
         sqs.send_message(queue_url: 'https://sqs.us-east-2.amazonaws.com/893543758111/smts-videos-queue', message_body: body)
         format.html { redirect_to @video, notice: 'Video was successfully created.' }
         format.json { render :show, status: :created, location: @video }
@@ -93,6 +78,6 @@ class VideosController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def video_params
-      params.require(:video).permit(:nombre, :apellido, :email, :titulo, :descripcion, :video_source, :concurso_id) #, :ppath, :state
+      params.require(:video).permit(:nombre, :apellido, :email, :titulo, :descripcion, :video_source, :id)
     end
 end

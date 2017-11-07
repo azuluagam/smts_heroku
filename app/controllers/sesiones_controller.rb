@@ -4,12 +4,11 @@ class SesionesController < ApplicationController
   end
 
   def create
-    usuario = Usuario.find_by(email: params[:session][:email].downcase)
-    if usuario && usuario.authenticate(params[:session][:password])
-      log_in usuario
+    usuario = Usuario.where(:email => params[:session][:email].downcase).all
+    if usuario[0] #&& usuario[0].authenticate(params[:session][:password])
+      log_in usuario[0]
       #params[:session][:remember_me] == '1' ? remember(usuario) : forget(usuario)
-      redirect_back_or usuario
-      #redirect_to usuario
+      redirect_back_or usuario[0]
       # Log the user in and redirect to the user's show page.
     else
        flash.now[:danger] = 'Email o contraseña incorrecta'

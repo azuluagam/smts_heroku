@@ -42,7 +42,7 @@
   </div>
 
   <div class="field">
-    <%= collection_select(:video, :concurso_id, @concursos, :id, :nombre, {:prompt => false}) %>
+    <%= collection_select(:video, :id, @concursos, :id, :nombre, {:prompt => false}) %>
   </div>
 
   <div class="actions">

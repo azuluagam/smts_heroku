@@ -49,7 +49,9 @@ gem 'dalli'
 gem 'dalli-elasticache'
 
 
-gem 'aws-sdk', '~> 3'
+#gem 'aws-sdk', '~> 3'
+gem 'aws-sdk', '~> 2'
+gem 'dynamoid', '~> 1'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

@@ -4,34 +4,25 @@ class ConcursosController < ApplicationController
 
   def show
     @concurso = Concurso.find(params[:id])
-    @video = @concurso.videos.build  
-    @videos = @concurso.videos.paginate(page: params[:page])
-    .paginate(:page => params[:page], :per_page => 2)
-    .order(created_at: :asc)
-
+    @video = Video.build
+    @videos = Video.all
+    @vfinals = Array.new
+    @videos.each { |v| s = v.concurso_ids
+    s.each do |n|
+      if n == @concurso.id
+        @vfinals.push(v)
+      end
+    end
+    }
+    @videos = @vfinals
   end
 
   def create
-    @concurso = Concurso.new(concurso_params)
-    concurso_id = DateTime.now.to_time.to_i
-    nombre  = concurso_params['nombre']
-    fecha_inicio = concurso_params['fechaInicio']
-    fecha_fin = concurso_params['fechaFin']
-    descripcion = concurso_params['descripcion']
-    usuario_id = current_user.id
-
-    aws_params = Hash.new
-    aws_params[:concurso_id] = concurso_id
-    aws_params[:usuario_id] = usuario_id
-    aws_params[:custom_fields]    = {
-        'nombre'    => nombre,
-        'fecha_inicio'   => fecha_inicio,
-        'fecha_fin' => fecha_fin,
-        'descripcion' => descripcion,
-        'imagen' => @concurso.imagen.file.filename
-    }
-    @concurso.save
-    if Aws.save_concurso_to_db(aws_params)
+    @concurso = Concurso.new(:nombre => concurso_params[:nombre], :imagen => concurso_params[:imagen].original_filename, :url => nil, :fechaInicio => concurso_params[:fechaInicio], :fechaFin => concurso_params[:fechaFin], :descripcion => concurso_params[:descripcion])
+    @concurso.usuario = current_user
+    if @concurso.save
+      uploader = ImagenUploader.new
+      uploader.store!(concurso_params[:imagen])
       flash[:success] = "Concurso Creado!"
       redirect_to root_url
     else
@@ -41,7 +32,7 @@ class ConcursosController < ApplicationController
   end
 
   def destroy
-    @concurso.destroy
+    @concurso.delete
     flash[:success] = "Concurso Eliminado!"
     redirect_to request.referrer || root_url
   end
@@ -52,7 +43,9 @@ class ConcursosController < ApplicationController
 
   def update
     @concurso = Concurso.find(params[:id])
-    if @concurso.update_attributes(concurso_params)
+    if @concurso.update_attributes(:nombre => concurso_params[:nombre], :imagen => concurso_params[:imagen].original_filename, :fechaInicio => concurso_params[:fechaInicio], :fechaFin => concurso_params[:fechaFin], :descripcion => concurso_params[:descripcion])
+      uploader = ImagenUploader.new
+      uploader.store!(concurso_params[:imagen])
       flash[:success] = "Concurso Actualizado"
       redirect_to @concurso
       # Handle a successful update.
@@ -61,8 +54,6 @@ class ConcursosController < ApplicationController
     end
   end
 
-
-
   private
 
     def concurso_params
@@ -70,7 +61,7 @@ class ConcursosController < ApplicationController
     end
 
     def correct_user
-      @concurso = current_user.concursos.find_by(id: params[:id])
+      @concurso = Concurso.find(params[:id])
       redirect_to root_url if @concurso.nil?
     end
 end

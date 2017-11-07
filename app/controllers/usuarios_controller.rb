@@ -4,32 +4,24 @@ class UsuariosController < ApplicationController
   before_action :logged_in_usuario, only: [:show, :index, :edit, :update, :destroy]
   before_action :correct_user,   only:  [:edit, :update]
   before_action :admin_user, only: :destroy
+
   def show
-    @usuario = Usuario.find(params[:id])
-    puts 'showAct'
-    puts @usuario.id
-    concursos = []
-    items = Aws.get_concursos_por_usuario(@usuario.id)
-    items.each { |item|
-        info = item['concurso_info']
-        concurso = Hash.new
-        concurso[:nombre] = info['nombre']
-        concurso[:fechaInicio] = info['fecha_inicio']
-        concurso[:fechaFin] = info['fecha_fin']
-        concurso[:descripcion] = info['descripcion']
-        concurso[:imagen] = info['imagen']
-        concurso[:id] = Integer(item['concurso_id'])
-        concurso[:usuario_id] = @usuario.id
-        puts concurso
-        @concurso = Concurso.new(concurso)
-        concursos.push(@concurso)
-    }
-    @concursos = concursos
+    @usuario = Usuario.find(params[:usuario_id].to_s)
+    @concursos = Concurso.all
+    @cfinals = Array.new
+    puts @usuario
+    @concursos.each { |c| s = c.usuario_ids
+      s.each do |n|
+        if n == @usuario.id
+          @cfinals.push(c)
+        end
+      end
+    }    
+    @concursos = @cfinals
   end
 
   def index
-    #@usuarios = Usuario.all
-    @usuarios = Usuario.paginate(page: params[:page])
+    @usuarios = Usuario.all
   end
 
   def new
@@ -37,8 +29,9 @@ class UsuariosController < ApplicationController
   end
 
   def create
-    @usuario = Usuario.new(usuario_params)
+    @usuario = Usuario.new(:nombre => usuario_params[:nombre], :apellido => usuario_params[:apellido], :email => usuario_params[:email], :password_digest => usuario_params[:password], :admin => false)
     if @usuario.save
+      puts @usuario.id
       log_in @usuario
       flash[:success] = "Bienvenido a SmartTools!"
       redirect_to @usuario
@@ -53,7 +46,7 @@ class UsuariosController < ApplicationController
 
   def update
     @usuario = Usuario.find(params[:id])
-    if @usuario.update_attributes(usuario_params)
+    if @usuario.update_attributes(:nombre => usuario_params[:nombre], :apellido => usuario_params[:apellido], :email => usuario_params[:email], :password_digest => usuario_params[:password])
       flash[:success] = "Perfil Actualizado"
       redirect_to @usuario
       # Handle a successful update.
@@ -63,13 +56,10 @@ class UsuariosController < ApplicationController
   end
  
   def destroy
-    Usuario.find(params[:id]).destroy
+    Usuario.find(params[:id]).delete
     flash[:success] = "Usuario Eliminado"
     redirect_to usuarios_url
   end
-
-
-
 
 
   private

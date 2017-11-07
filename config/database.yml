@@ -15,7 +15,7 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   username: smts
   password: G8jIICwp
-  host: east1-mariadb-smts.crkushtt5jcr.us-east-1.rds.amazonaws.com
+  host: 172.28.128.3 #east1-mariadb-smts.crkushtt5jcr.us-east-1.rds.amazonaws.com
   port: 3306 # If you are using the default port (3306 for MariaDb/MySQL) there is no necessity to specify this property.
 
 development:
