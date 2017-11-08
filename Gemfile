@@ -45,8 +45,8 @@ gem 'sidetiq', github: 'sfroehler/sidetiq', branch: 'celluloid-0-17-compatibilit
 gem 'jwplayer-rails', :git => 'https://github.com/dutgriff/jwplayer-rails.git'
 gem 'jquery-rails'
 #gem 'rdoc'
-gem 'dalli'
-gem 'dalli-elasticache'
+#gem 'dalli'
+#gem 'dalli-elasticache'
 #gem 'pg'
 
 #gem 'aws-sdk', '~> 3'
