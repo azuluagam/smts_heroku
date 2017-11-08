@@ -12,7 +12,7 @@ Rails.application.configure do
 
   # Full error reports are disabled and caching is turned on.
   config.consider_all_requests_local       = false
-  config.action_controller.perform_caching = true
+  #config.action_controller.perform_caching = false
 
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
@@ -52,17 +52,17 @@ Rails.application.configure do
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
 
-  endpoint    = "elasticache-smts.coyoqj.cfg.use1.cache.amazonaws.com:11211"
-  elasticache = Dalli::ElastiCache.new(endpoint)
-  config.cache_store = :dalli_store, elasticache.servers, {:expires_in => 1.day, :compress => true}
-  config.action_controller.perform_caching = true
+  #endpoint    = "elasticache-smts.coyoqj.cfg.use1.cache.amazonaws.com:11211"
+  #elasticache = Dalli::ElastiCache.new(endpoint)
+  #config.cache_store = :null_store #:dalli_store, elasticache.servers, {:expires_in => 1.day, :compress => true}
+  #config.action_controller.perform_caching = false
 
 
 
   # Use a real queuing backend for Active Job (and separate queues per environment)
   # config.active_job.queue_adapter     = :resque
   # config.active_job.queue_name_prefix = "SmartToolsApp_#{Rails.env}"
-  config.action_mailer.perform_caching = false
+  #config.action_mailer.perform_caching = false
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.

@@ -13,13 +13,13 @@ Rails.application.configure do
   config.consider_all_requests_local = true
 
   # Enable/disable caching. By default caching is disabled.
-  endpoint    = "elasticache-smts.coyoqj.cfg.use1.cache.amazonaws.com:11211"
-  elasticache = Dalli::ElastiCache.new(endpoint)
+  #endpoint    = "elasticache-smts.coyoqj.cfg.use1.cache.amazonaws.com:11211"
+  #elasticache = Dalli::ElastiCache.new(endpoint)
 
   if Rails.root.join('tmp/caching-dev.txt').exist?
     config.action_controller.perform_caching = true
 
-    config.cache_store = :memory_store
+    #config.cache_store = :null_store #:memory_store
     config.public_file_server.headers = {
       'Cache-Control' => 'public, max-age=172800'
     }
@@ -27,8 +27,8 @@ Rails.application.configure do
     #config.action_controller.perform_caching = false
     #config.cache_store = :null_store
 
-    config.action_controller.perform_caching = true
-    config.cache_store = :dalli_store, elasticache.servers, {:expires_in => 1.day, :compress => true}
+    #config.action_controller.perform_caching = false
+    #config.cache_store = :dalli_store, elasticache.servers, {:expires_in => 1.day, :compress => true}
 
 
   end
