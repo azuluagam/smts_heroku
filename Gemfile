@@ -8,7 +8,7 @@ end
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.1.3'
 # Use mysql as the database for Active Record
-gem 'mysql2', '>= 0.3.18', '< 0.5'
+#gem 'mysql2', '>= 0.3.18', '< 0.5'
 # Use Puma as the app server
 gem 'puma', '~> 3.7'
 # Use SCSS for stylesheets
@@ -45,9 +45,9 @@ gem 'sidetiq', github: 'sfroehler/sidetiq', branch: 'celluloid-0-17-compatibilit
 gem 'jwplayer-rails', :git => 'https://github.com/dutgriff/jwplayer-rails.git'
 gem 'jquery-rails'
 #gem 'rdoc'
-gem 'dalli'
-gem 'dalli-elasticache'
-
+#gem 'dalli'
+#gem 'dalli-elasticache'
+#gem 'pg'
 
 #gem 'aws-sdk', '~> 3'
 gem 'aws-sdk', '~> 2'
@@ -66,7 +66,7 @@ end
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
-  gem 'web-console', '>= 3.3.0'
+  #gem 'web-console', '>= 3.3.0'
   gem 'listen', '>= 3.0.5', '< 3.2'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
