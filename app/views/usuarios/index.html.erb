@@ -1,0 +1,23 @@
+<% provide(:title, 'Todos los usuarios') %>
+<h1>Todos los usuarios</h1>
+
+<%= will_paginate %>
+
+<ul class="usuarios">
+  <%= render @usuarios %>
+
+<!--
+  <% @usuarios.each do |usuario| %>
+     <%= render usuario %>
+
+    <li>
+      <%= gravatar_for usuario, size: 50 %>
+      <%= link_to usuario.nombre+" "+ usuario.apellido, usuario %>
+    </li>
+
+
+  <% end %>
+-->
+</ul>
+
+<%= will_paginate %>

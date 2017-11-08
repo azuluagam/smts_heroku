@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @video.nombre %>
+</p>
+
+<p>
+  <strong>Lastname:</strong>
+  <%= @video.apellido %>
+</p>
+
+<p>
+  <strong>Email:</strong>
+  <%= @video.email %>
+</p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @video.titulo %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @video.descripcion %>
+</p>
+
+<p>
+  <strong>Opath:</strong>
+  <%= @video.video_source %>
+</p>
+
+<p>
+  <strong>State:</strong>
+  <%= @video.estado %>
+</p>
+
+<%= link_to 'Edit', edit_video_path(@video) %> |
+<%= link_to 'Back', videos_path %>

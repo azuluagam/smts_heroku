@@ -1,0 +1,51 @@
+<%= form_with(model: @video, local: true, :html => { :multipart => true }) do |form| %>
+  <% if @video.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@video.errors.count, "error") %> prohibite0d this video from being saved:</h2>
+
+      <ul>
+      <% @video.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :nombres %>
+    <%= form.text_field :nombre, placeholder: "Nombres"  %>
+  </div>
+
+  <div class="field">
+    <%= form.label :apellidos %>
+    <%= form.text_field :apellido, placeholder: "Apellidos" %>
+  </div>
+
+  <div class="field">
+    <%= form.label :email %>
+    <%= form.text_field :email, placeholder: "Dirección Email"  %>
+  </div>
+
+  <div class="field">
+    <%= form.label :titulo %>
+    <%= form.text_field :titulo, placeholder: "Escribe un titulo para tu video" %>
+  </div>
+
+  <div class="field">
+    <%= form.label :descripcion %>
+    <%= form.text_area :descripcion, placeholder: "Escribe la descripción de tu video" %>
+  </div>
+
+  <div class="field">
+    <%= form.label :"Selecciona tu video" %>
+    <%= form.file_field :video_source %>
+  </div>
+
+  <div class="field">
+    <%= collection_select(:video, :id, Concurso.all, :id, :nombre, {:prompt => false}) %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Subir", class: "btn btn-primary" %>
+  </div>
+<% end %>

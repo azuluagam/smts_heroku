@@ -1,0 +1,16 @@
+<li id="video-<%= video.id %>">
+  <span class="concurso"><%= link_to @concurso.nombre, "/sites/"+@concurso.id.to_s %></span>
+  <span class="video"><%= video.descripcion %></span>
+  <%= jwplayer_assets %>
+  <%= jwplayer({
+        id: "jwplayer"+video.id.to_s,
+        name: video.id,
+        file: "https://s3.amazonaws.com/smarttoolsG5/public/upload/" + video.video_source.split('.')[0] + ".mp4",
+        width: 500,
+        height: 200
+   }) %>
+  <span class="timestamp">
+    Posted <%= time_ago_in_words(video.created_at) %> ago.
+  </span>
+</li>
+

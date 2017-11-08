@@ -1,0 +1,2 @@
+## Recipe dependencies
+name 'mariadb'

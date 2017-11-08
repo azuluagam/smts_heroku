@@ -1,0 +1,40 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Videos</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Lastname</th>
+      <th>Email</th>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Opath</th>
+      <th>Ppath</th>
+      <th>State</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @videos.each do |video| %>
+      <tr>
+        <td><%= video.nombre %></td>
+        <td><%= video.apellido %></td>
+        <td><%= video.email %></td>
+        <td><%= video.titulo %></td>
+        <td><%= video.descripcion %></td>
+        <td><%= video.video_source %></td>
+        <td><%= video.estado %></td>
+        <td><%= link_to 'Show', video %></td>
+        <td><%= link_to 'Edit', edit_video_path(video) %></td>
+        <td><%= link_to 'Destroy', video, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Video', new_video_path %>

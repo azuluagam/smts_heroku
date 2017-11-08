@@ -1,0 +1,12 @@
+<div id="contenedor">
+
+
+
+<div id="principal">
+<h1><%= current_user.nombre %></h1>
+</div>
+
+</div>
+
+
+<span><%= pluralize(current_user.concursos.count, "concurso") %></span>
