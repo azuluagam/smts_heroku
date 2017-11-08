@@ -1,1 +1,0 @@
-# smts_heroku
